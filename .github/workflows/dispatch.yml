@@ -1,0 +1,10 @@
+name: Call a reusable workflow
+
+on:
+  workflow_dispatch:
+
+  jobs:
+    call:
+      permissions:
+        issues: write
+      uses: .github/workflows/ci-rust.yml # reuse local repository
