@@ -97,28 +97,8 @@ jobs:
           key: ${{ needs.params.outputs.cache-target-key }}-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Run cargo
-        run: |
-          source ~/.cargo/env
-
-          cargo +nightly update -Z minimal-versions
-
-          cargo +stable test
-          cargo +stable clippy
-          cargo +stable test --all-features
-          cargo +stable clippy --all-features
-
-          cargo +beta test
-          cargo +beta clippy
-          cargo +beta test --all-features
-          cargo +beta clippy --all-features
-
-          cargo +nightly test
-          cargo +nightly clippy
-          cargo +nightly test --all-features
-          cargo +nightly clippy --all-features
-
-          cargo update
-
+        env:
+          TEST_SETS: |
           cargo +stable test
           cargo +stable clippy -- -D clippy::all
           cargo +stable test --no-default-features
@@ -139,6 +119,14 @@ jobs:
           cargo +nightly clippy --no-default-features -- -D clippy::all
           cargo +nightly test --all-features
           cargo +nightly clippy --all-features -- -D clippy::all
+
+        run: |
+          source ~/.cargo/env
+          cargo +nightly update -Z minimal-versions
+          "$TEST_SETS"
+          cargo update
+          "$TEST_SETS"
+
 
       - name: Save cached target
         if: steps.cache-target-restore.outputs.cache-hit != 'true'
