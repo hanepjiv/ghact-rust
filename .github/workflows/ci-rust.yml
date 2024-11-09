@@ -104,35 +104,41 @@ jobs:
 
           cargo +stable test
           cargo +stable clippy
-          cargo +stable test --features parking_lot
-          cargo +stable clippy --features parking_lot
+          cargo +stable test --all-features
+          cargo +stable clippy --all-features
 
           cargo +beta test
           cargo +beta clippy
-          cargo +beta test --features parking_lot
-          cargo +beta clippy --features parking_lot
+          cargo +beta test --all-features
+          cargo +beta clippy --all-features
 
           cargo +nightly test
           cargo +nightly clippy
-          cargo +nightly test --features parking_lot
-          cargo +nightly clippy --features parking_lot
+          cargo +nightly test --all-features
+          cargo +nightly clippy --all-features
 
           cargo update
 
           cargo +stable test
-          cargo +stable clippy
-          cargo +stable test --features parking_lot
-          cargo +stable clippy --features parking_lot
+          cargo +stable clippy -- -D clippy::all
+          cargo +stable test --no-default-features
+          cargo +stable clippy --no-default-features -- -D clippy::all
+          cargo +stable test --all-features
+          cargo +stable clippy --all-features -- -D clippy::all
 
           cargo +beta test
-          cargo +beta clippy
-          cargo +beta test --features parking_lot
-          cargo +beta clippy --features parking_lot
+          cargo +beta clippy -- -D clippy::all
+          cargo +beta test --no-default-features
+          cargo +beta clippy --no-default-features -- -D clippy::all
+          cargo +beta test --all-features
+          cargo +beta clippy --all-features -- -D clippy::all
 
           cargo +nightly test
-          cargo +nightly clippy
-          cargo +nightly test --features parking_lot
-          cargo +nightly clippy --features parking_lot
+          cargo +nightly clippy -- -D clippy::all
+          cargo +nightly test --no-default-features
+          cargo +nightly clippy --no-default-features -- -D clippy::all
+          cargo +nightly test --all-features
+          cargo +nightly clippy --all-features -- -D clippy::all
 
       - name: Save cached target
         if: steps.cache-target-restore.outputs.cache-hit != 'true'
