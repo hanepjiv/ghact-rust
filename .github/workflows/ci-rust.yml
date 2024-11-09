@@ -122,10 +122,9 @@ jobs:
         run: |
           source ~/.cargo/env
           cargo +nightly update -Z minimal-versions
-          "$TEST_SETS"
+          echo "$TEST_SETS" | sh
           cargo update
-          "$TEST_SETS"
-
+          echo "$TEST_SETS" | sh
 
       - name: Save cached target
         if: steps.cache-target-restore.outputs.cache-hit != 'true'
