@@ -96,30 +96,34 @@ jobs:
           path: ${{ needs.params.outputs.cache-target-path }}
           key: ${{ needs.params.outputs.cache-target-key }}-${{ hashFiles('**/Cargo.lock') }}
 
+
+      run: |
+        {
+        echo 'TEST_SETS<<EOF'
+        echo 'cargo +stable test'
+        echo 'cargo +stable clippy -- -D clippy::all'
+        echo 'cargo +stable test --no-default-features'
+        echo 'cargo +stable clippy --no-default-features -- -D clippy::all'
+        echo 'cargo +stable test --all-features'
+        echo 'cargo +stable clippy --all-features -- -D clippy::all'
+
+        echo 'cargo +beta test'
+        echo 'cargo +beta clippy -- -D clippy::all'
+        echo 'cargo +beta test --no-default-features'
+        echo 'cargo +beta clippy --no-default-features -- -D clippy::all'
+        echo 'cargo +beta test --all-features'
+        echo 'cargo +beta clippy --all-features -- -D clippy::all'
+
+        echo 'cargo +nightly test'
+        echo 'cargo +nightly clippy -- -D clippy::all'
+        echo 'cargo +nightly test --no-default-features'
+        echo 'cargo +nightly clippy --no-default-features -- -D clippy::all'
+        echo 'cargo +nightly test --all-features'
+        echo 'cargo +nightly clippy --all-features -- -D clippy::all'
+        echo 'EOF'
+        } >> $GITHUV_ENV
+
       - name: Run cargo
-        env:
-          TEST_SETS: |
-          cargo +stable test
-          cargo +stable clippy -- -D clippy::all
-          cargo +stable test --no-default-features
-          cargo +stable clippy --no-default-features -- -D clippy::all
-          cargo +stable test --all-features
-          cargo +stable clippy --all-features -- -D clippy::all
-
-          cargo +beta test
-          cargo +beta clippy -- -D clippy::all
-          cargo +beta test --no-default-features
-          cargo +beta clippy --no-default-features -- -D clippy::all
-          cargo +beta test --all-features
-          cargo +beta clippy --all-features -- -D clippy::all
-
-          cargo +nightly test
-          cargo +nightly clippy -- -D clippy::all
-          cargo +nightly test --no-default-features
-          cargo +nightly clippy --no-default-features -- -D clippy::all
-          cargo +nightly test --all-features
-          cargo +nightly clippy --all-features -- -D clippy::all
-
         run: |
           source ~/.cargo/env
           cargo +nightly update -Z minimal-versions
