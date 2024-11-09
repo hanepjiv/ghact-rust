@@ -156,13 +156,23 @@ jobs:
           ASSIGNEES: ${{ github.actor }}
           LABELS: workflows,ci
           BODY: |
-            ref_name: "REF_NAME"
-            run_id: "$RUN_ID"
-            run_number: "$RUN_NUMBER"
+            ref_name: ${{ env.REF_NAME }}
+            run_id: ${{ env.RUN_ID }}
+            run_number: ${{ env.RUN_NUMBER }}
 
           PINNED: true
           CLOSE_PREVIOUS: true
         run: |
+          if [[ $CLOSE_PREVIOUS == true ]]; then
+            previous_issue_number=$(gh issue list \
+              --label "$LABELS" \
+              --json number \
+              --jq '.[0].number')
+            if [[ -n $previous_issue_number ]]; then
+              gh issue close "$previous_issue_number"
+              gh issue unpin "$previous_issue_number"
+            fi
+          fi
           new_issue_url=$(gh issue create \
             --title "$TITLE" \
             --assignee "$ASSIGNEES" \
