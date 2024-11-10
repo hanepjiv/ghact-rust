@@ -10,5 +10,6 @@ on:
 jobs:
   ci-rust:
     permissions:
+      contents: read
       issues: write
     uses: ./.github/workflows/ci-rust.yml # reuse local repository
