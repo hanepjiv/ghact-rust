@@ -2,6 +2,11 @@ name: CI Rust
 
 on:
   workflow_call:
+    inputs:
+      libs:
+        description: comma separated libs. \'apt install -y -qq <lib>\'
+        required: false
+        type: string
 
 env:
   CARGO_TERM_COLOR: always
@@ -70,6 +75,12 @@ jobs:
       issues: write
 
     steps:
+      - name: Install libs
+        if: inputs.libs != ''
+        run: |
+          sudo apt update -y -qq
+          for i in {${{ inputs.libs }}}; do sudo apt install -y -qq $i; done
+
       - name: Restore cached toolchain
         id: cache-toolchain-restore
         uses: actions/cache/restore@v4
@@ -122,7 +133,7 @@ jobs:
       - name: Run cargo
         run: |
           source ~/.cargo/env
-          cargo +nightly update -Z minimal-versions
+          cargo +nightly update -Z direct-minimal-versions
           echo "$TEST_SETS" | sh
           cargo update
           echo "$TEST_SETS" | sh
