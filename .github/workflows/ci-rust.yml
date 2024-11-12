@@ -175,7 +175,7 @@ jobs:
           path: ${{ needs.params.outputs.cache-rust-target-path }}
           key: ${{ needs.params.outputs.cache-rust-target-key }}-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Run cargo {test,clippy}
+      - name: Run cargo test, clippy
         run: |
           source ~/.cargo/env
           cargo +nightly update -Z direct-minimal-versions
