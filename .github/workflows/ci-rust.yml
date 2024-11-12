@@ -16,6 +16,12 @@ on:
           comma separated apt-packages. \'apt-get install -y -qq <package>\'
         required: false
         type: string
+    secrets:
+      ssh-private-keys:
+        description: |
+          comma separated ssh private keys.
+        required: false
+        type: string
 
 env:
   CARGO_TERM_COLOR: always
@@ -94,8 +100,8 @@ jobs:
           EOF
           chmod 600 ~/.ssh/config
 
-          if [[ '' != "${{ secrets.SSH_PRIVATE_KEYS }}" ]]; then
-            IFS=, inputs=("${{ secrets.SSH_PRIVATE_KEYS }}")
+          if [[ '' != "${{ secrets.ssh-private-keys }}" ]]; then
+            IFS=, inputs=("${{ secrets.ssh-private-keys }}")
             for i in ${inputs[@]}
             do key=`echo $i | grep -v '^$'` # trim blank line
                out=~/.ssh/`echo $key | sha256sum | cut -f1 -d' '`
