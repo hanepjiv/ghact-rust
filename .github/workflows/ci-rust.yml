@@ -1,60 +1,67 @@
+# -*-coding:utf-8-unix;mode:yml-*-
+
+#  Copyright 2024 hanepjiv
+#  @author hanepjiv <hanepjiv@gmail.com>
+#  @copyright The MIT License (MIT) / Apache License Version 2.0
+#  @since 2024/11/09
+#  @date 2024/11/12
+
 name: CI Rust
 
 on:
   workflow_call:
     inputs:
-      libs:
-        description: comma separated libs. \'apt install -y -qq <lib>\'
+      apt-packages:
+        description: |
+          comma separated apt-packages. \'apt-get install -y -qq <package>\'
         required: false
         type: string
 
 env:
   CARGO_TERM_COLOR: always
 
-  TEST_SETS: |
-    cargo +stable test
-    cargo +stable clippy -- -D clippy::all
-    cargo +stable test --no-default-features
-    cargo +stable clippy --no-default-features -- -D clippy::all
-    cargo +stable test --all-features
-    cargo +stable clippy --all-features -- -D clippy::all
-
-    cargo +beta test
-    cargo +beta clippy -- -D clippy::all
-    cargo +beta test --no-default-features
-    cargo +beta clippy --no-default-features -- -D clippy::all
-    cargo +beta test --all-features
-    cargo +beta clippy --all-features -- -D clippy::all
-
-    cargo +nightly test
-    cargo +nightly clippy -- -D clippy::all
-    cargo +nightly test --no-default-features
-    cargo +nightly clippy --no-default-features -- -D clippy::all
-    cargo +nightly test --all-features
-    cargo +nightly clippy --all-features -- -D clippy::all
-
 jobs:
   params:
     runs-on: ubuntu-latest
 
     outputs:
-      repos: ${{ steps.repos.outputs.ret }}
+      test-sets: |
+        cargo +stable test
+        cargo +stable clippy -- -D clippy::all
+        cargo +stable test --no-default-features
+        cargo +stable clippy --no-default-features -- -D clippy::all
+        cargo +stable test --all-features
+        cargo +stable clippy --all-features -- -D clippy::all
 
-      date: ${{ steps.date.outputs.ret }}
+        cargo +beta test
+        cargo +beta clippy -- -D clippy::all
+        cargo +beta test --no-default-features
+        cargo +beta clippy --no-default-features -- -D clippy::all
+        cargo +beta test --all-features
+        cargo +beta clippy --all-features -- -D clippy::all
 
-      cache-toolchain-path: |
+        cargo +nightly test
+        cargo +nightly clippy -- -D clippy::all
+        cargo +nightly test --no-default-features
+        cargo +nightly clippy --no-default-features -- -D clippy::all
+        cargo +nightly test --all-features
+        cargo +nightly clippy --all-features -- -D clippy::all
+
+      cache-rust-toolchain-path: |
         ~/.cargo/
         ~/.rustup/
 
-      cache-toolchain-key: ${{ runner.os }}-${{ runner.arch }}-toolchain-${{ steps.date.outputs.ret }}
-
-      cache-target-path: |
+      cache-rust-target-path: |
         ~/.cargo/registry/index/
         ~/.cargo/registry/cache/
         ~/.cargo/git/db/
         target/
 
-      cache-target-key: ${{ runner.os }}-${{ runner.arch }}-${{ steps.repos.outputs.ret }}-target
+      repos: ${{ steps.repos.outputs.ret }}
+      date: ${{ steps.date.outputs.ret }}
+
+      cache-rust-toolchain-key: ${{ runner.os }}-${{ runner.arch }}-rust-toolchain-${{ steps.date.outputs.ret }}
+      cache-rust-target-key: ${{ runner.os }}-${{ runner.arch }}-${{ steps.repos.outputs.ret }}-rust-target
 
     steps:
       - id: repos
@@ -75,45 +82,93 @@ jobs:
       issues: write
 
     steps:
-      - name: Install libs
-        if: inputs.libs != ''
+      - name: Setup SSH
         run: |
-          sudo apt update -y -qq
-          for i in {${{ inputs.libs }}}; do sudo apt install -y -qq $i; done
+          eval `ssh-agent -s`
 
-      - name: Restore cached toolchain
-        id: cache-toolchain-restore
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          cat <<EOF > ~/.ssh/config
+          Host github.com
+            User git
+            Hostname github.com
+          EOF
+          chmod 600 ~/.ssh/config
+
+          if [[ '' != "${{ secrets.SSH_PRIVATE_KEY_00 }}" ]]; then
+            echo "${{ secrets.SSH_PRIVATE_KEY_00 }}" > ~/.ssh/id_rsa_00
+            chmod 600 ~/.ssh/id_rsa_00
+            echo "  IdentityFile ~/.ssh/id_rsa_00" >> ~/.ssh/config
+          fi
+          if [[ '' != "${{ secrets.SSH_PRIVATE_KEY_01 }}" ]]; then
+            echo "${{ secrets.SSH_PRIVATE_KEY_01 }}" > ~/.ssh/id_rsa_01
+            chmod 600 ~/.ssh/id_rsa_01
+            echo "  IdentityFile ~/.ssh/id_rsa_01" >> ~/.ssh/config
+          fi
+          if [[ '' != "${{ secrets.SSH_PRIVATE_KEY_02 }}" ]]; then
+            echo "${{ secrets.SSH_PRIVATE_KEY_02 }}" > ~/.ssh/id_rsa_02
+            chmod 600 ~/.ssh/id_rsa_02
+            echo "  IdentityFile ~/.ssh/id_rsa_02" >> ~/.ssh/config
+          fi
+          if [[ '' != "${{ secrets.SSH_PRIVATE_KEY_03 }}" ]]; then
+            echo "${{ secrets.SSH_PRIVATE_KEY_03 }}" > ~/.ssh/id_rsa_03
+            chmod 600 ~/.ssh/id_rsa_03
+            echo "  IdentityFile ~/.ssh/id_rsa_03" >> ~/.ssh/config
+          fi
+
+      - name: Setup git
+        run: |
+          cat <<EOF > ~/.gitconfig
+          [credential]
+          helper = cache
+          EOF
+
+      - name: Install bins
+        run: |
+          sudo apt-get update -y -qq
+
+      - name: Install apt-packages
+        if: inputs.apt-packages != ''
+        run: |
+          for i in {${{ inputs.apt-packages }}}; do
+            sudo apt-get install -y -qq $i
+          done
+
+      - name: Restore cached Rust toolchain
+        id: cache-rust-toolchain-restore
         uses: actions/cache/restore@v4
         with:
-          path: ${{ needs.params.outputs.cache-toolchain-path }}
-          key: ${{ needs.params.outputs.cache-toolchain-key }}
+          path: ${{ needs.params.outputs.cache-rust-toolchain-path }}
+          key: ${{ needs.params.outputs.cache-rust-toolchain-key }}
 
       - name: Setup Rust Toolchain
-        if: steps.cache-toolchain-restore.outputs.cache-hit != 'true'
+        if: steps.cache-rust-toolchain-restore.outputs.cache-hit != 'true'
         run: |
-          if ! [ -x "$(command -v rustup)" ]; then
-            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          if ! [[ -x "$(command -v rustup)" ]]; then
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | \
+            sh -s -- -y
           fi
 
           source ~/.cargo/env
 
           rustup set profile minimal
-
           rustup install stable beta nightly
-
           rustup component add --toolchain stable clippy
           rustup component add --toolchain beta clippy
           rustup component add --toolchain nightly clippy
 
           cargo install cargo-audit
 
-      - name: Save cached toolchain
-        if: steps.cache-toolchain-restore.outputs.cache-hit != 'true'
-        id: cache-toolchain-save
+          echo "net.git-fetch-with-cli = true" >> ~/.cargo/config.toml
+
+      - name: Save cached Rust toolchain
+        if: steps.cache-rust-toolchain-restore.outputs.cache-hit != 'true'
+        id: cache-rust-toolchain-save
         uses: actions/cache/save@v4
         with:
-          path: ${{ needs.params.outputs.cache-toolchain-path }}
-          key: ${{ needs.params.outputs.cache-toolchain-key }}
+          path: ${{ needs.params.outputs.cache-rust-toolchain-path }}
+          key: ${{ needs.params.outputs.cache-rust-toolchain-key }}
 
       - uses: actions/checkout@v4
 
@@ -123,28 +178,28 @@ jobs:
           cargo update
           cargo audit
 
-      - name: Restore cached target
-        id: cache-target-restore
+      - name: Restore cached Rust target
+        id: cache-rust-target-restore
         uses: actions/cache/restore@v4
         with:
-          path: ${{ needs.params.outputs.cache-target-path }}
-          key: ${{ needs.params.outputs.cache-target-key }}-${{ hashFiles('**/Cargo.lock') }}
+          path: ${{ needs.params.outputs.cache-rust-target-path }}
+          key: ${{ needs.params.outputs.cache-rust-target-key }}-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Run cargo
+      - name: Run cargo {test,clippy}
         run: |
           source ~/.cargo/env
           cargo +nightly update -Z direct-minimal-versions
-          echo "$TEST_SETS" | sh
+          echo "${{ needs.params.outputs.test-sets }}" | sh
           cargo update
-          echo "$TEST_SETS" | sh
+          echo "${{ needs.params.outputs.test-sets }}" | sh
 
-      - name: Save cached target
-        if: steps.cache-target-restore.outputs.cache-hit != 'true'
-        id: cache-target-save
+      - name: Save cached Rust target
+        if: steps.cache-rust-target-restore.outputs.cache-hit != 'true'
+        id: cache-rust-target-save
         uses: actions/cache/save@v4
         with:
-          path: ${{ needs.params.outputs.cache-target-path }}
-          key: ${{ needs.params.outputs.cache-target-key }}-${{ hashFiles('**/Cargo.lock') }} # use new hash
+          path: ${{ needs.params.outputs.cache-rust-target-path }}
+          key: ${{ needs.params.outputs.cache-rust-target-key }}-${{ hashFiles('**/Cargo.lock') }} # use new hash
 
       - name: Create issue when failed
         if: ${{ failure() && github.event_name == 'push' }}
