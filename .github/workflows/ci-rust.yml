@@ -84,8 +84,6 @@ jobs:
     steps:
       - name: Setup SSH
         run: |
-          eval `ssh-agent -s`
-
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
 
@@ -96,26 +94,18 @@ jobs:
           EOF
           chmod 600 ~/.ssh/config
 
-          if [[ '' != "${{ secrets.SSH_PRIVATE_KEY_00 }}" ]]; then
-            echo "${{ secrets.SSH_PRIVATE_KEY_00 }}" > ~/.ssh/id_rsa_00
-            chmod 600 ~/.ssh/id_rsa_00
-            echo "  IdentityFile ~/.ssh/id_rsa_00" >> ~/.ssh/config
+          if [[ '' != "${{ secrets.SSH_PRIVATE_KEYS }}" ]]; then
+            IFS=, inputs=("${{ secrets.SSH_PRIVATE_KEYS }}")
+            for i in ${inputs[@]}
+            do key=`echo $i | grep -v '^$'` # trim blank line
+               out=~/.ssh/`echo $key | sha256sum | cut -f1 -d' '`
+               echo $key > $out
+               chmod 600 $out
+               echo "  IdentityFile $out" >> ~/.ssh/config
+            done
           fi
-          if [[ '' != "${{ secrets.SSH_PRIVATE_KEY_01 }}" ]]; then
-            echo "${{ secrets.SSH_PRIVATE_KEY_01 }}" > ~/.ssh/id_rsa_01
-            chmod 600 ~/.ssh/id_rsa_01
-            echo "  IdentityFile ~/.ssh/id_rsa_01" >> ~/.ssh/config
-          fi
-          if [[ '' != "${{ secrets.SSH_PRIVATE_KEY_02 }}" ]]; then
-            echo "${{ secrets.SSH_PRIVATE_KEY_02 }}" > ~/.ssh/id_rsa_02
-            chmod 600 ~/.ssh/id_rsa_02
-            echo "  IdentityFile ~/.ssh/id_rsa_02" >> ~/.ssh/config
-          fi
-          if [[ '' != "${{ secrets.SSH_PRIVATE_KEY_03 }}" ]]; then
-            echo "${{ secrets.SSH_PRIVATE_KEY_03 }}" > ~/.ssh/id_rsa_03
-            chmod 600 ~/.ssh/id_rsa_03
-            echo "  IdentityFile ~/.ssh/id_rsa_03" >> ~/.ssh/config
-          fi
+
+          eval `ssh-agent -s`
 
       - name: Setup git
         run: |
@@ -124,13 +114,10 @@ jobs:
           helper = cache
           EOF
 
-      - name: Install bins
-        run: |
-          sudo apt-get update -y -qq
-
       - name: Install apt-packages
         if: inputs.apt-packages != ''
         run: |
+          sudo apt-get update -y -qq
           for i in {${{ inputs.apt-packages }}}; do
             sudo apt-get install -y -qq $i
           done
