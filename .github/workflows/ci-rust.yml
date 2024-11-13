@@ -4,7 +4,7 @@
 #  @author hanepjiv <hanepjiv@gmail.com>
 #  @copyright The MIT License (MIT) / Apache License Version 2.0
 #  @since 2024/11/09
-#  @date 2024/11/12
+#  @date 2024/11/13
 
 name: CI Rust
 
@@ -66,6 +66,9 @@ jobs:
       cache-rust-toolchain-key: ${{ runner.os }}-${{ runner.arch }}-rust-toolchain-${{ steps.date.outputs.ret }}
       cache-rust-target-key: ${{ runner.os }}-${{ runner.arch }}-${{ steps.repos.outputs.ret }}-rust-target
 
+      pkgs: ${{ steps.pkgs.outputs.ret00 }}
+      pkgs_sha: ${{ steps.pkgs.outputs.ret01 }}
+
     steps:
       - id: repos
         run: echo "ret=${GITHUB_REPOSITORY#${GITHUB_REPOSITORY_OWNER}/}" >> $GITHUB_OUTPUT
@@ -74,6 +77,13 @@ jobs:
         env:
           TZ: "TZ"
         run: echo "ret=$(date +'%Y%0m%0d')" >> $GITHUB_OUTPUT
+
+      - id: pkgs
+        run: |
+          PKGS="${{ inputs.apt-packages }}"
+          PKGS="${PKGS//,/ }"
+          echo "ret00=$PKGS" >> $GITHUB_OUTPUT
+          echo "ret01=`echo $PKGS | sha256sum | cut -f1 -d' '`" >> $GITHUB_OUTPUT
 
   cargo:
     runs-on: ubuntu-latest
@@ -117,13 +127,16 @@ jobs:
           helper = cache
           EOF
 
-      - name: Install apt-packages
-        if: inputs.apt-packages != ''
+      - name: Update apt
         run: |
           sudo apt-get update -y -qq
-          for i in {${{ inputs.apt-packages }}}; do
-            sudo apt-get install -y -qq $i
-          done
+
+      - name: Install apt-packages
+        if: inputs.apt-packages != ''
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: ${{ needs.params.outputs.pkgs }}
+          version: ${{ needs.params.outputs.pkgs_sha }}
 
       - name: Restore cached Rust toolchain
         id: cache-rust-toolchain-restore
@@ -142,15 +155,20 @@ jobs:
 
           source ~/.cargo/env
 
+          cat <<EOF >> ~/.cargo/config
+          [net]
+          git-fetch-with-cli = true
+          EOF
+
           rustup set profile minimal
           rustup install stable beta nightly
           rustup component add --toolchain stable clippy
           rustup component add --toolchain beta clippy
           rustup component add --toolchain nightly clippy
 
-          cargo install cargo-audit
+          curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 
-          echo "net.git-fetch-with-cli = true" >> ~/.cargo/config.toml
+          cargo binstall -y cargo-audit
 
       - name: Save cached Rust toolchain
         if: steps.cache-rust-toolchain-restore.outputs.cache-hit != 'true'
