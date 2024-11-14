@@ -4,7 +4,7 @@
 #  @author hanepjiv <hanepjiv@gmail.com>
 #  @copyright The MIT License (MIT) / Apache License Version 2.0
 #  @since 2024/11/09
-#  @date 2024/11/13
+#  @date 2024/11/14
 
 name: CI Rust
 
@@ -126,10 +126,6 @@ jobs:
           [credential]
           helper = cache
           EOF
-
-      - name: Update apt
-        run: |
-          sudo apt-get update -y -qq
 
       - name: Install apt-packages
         if: inputs.apt-packages != ''
