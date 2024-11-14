@@ -219,9 +219,9 @@ jobs:
           ASSIGNEES: ${{ github.actor }}
           LABELS: workflows,ci
           BODY: |
-            ref_name: ${{ github.ref_name }}
-            run_id: ${{ github.run_id }}
-            run_number: ${{ github.run_number }}
+            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            https://github.com/${{ github.repository }}/tree/${{ github.ref_name }}
 
           PINNED: true
           CLOSE_PREVIOUS: true
