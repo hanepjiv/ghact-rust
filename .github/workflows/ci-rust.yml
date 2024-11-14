@@ -129,7 +129,7 @@ jobs:
 
       - name: Update apt
         run: |
-          apt-get update -y -qq
+          sudo apt-get update -y -qq
 
       - name: Install apt-packages
         if: inputs.apt-packages != ''
