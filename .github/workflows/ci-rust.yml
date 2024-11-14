@@ -127,6 +127,10 @@ jobs:
           helper = cache
           EOF
 
+      - name: Update apt
+        run: |
+          apt-get update -y -qq
+
       - name: Install apt-packages
         if: inputs.apt-packages != ''
         uses: awalsh128/cache-apt-pkgs-action@latest
@@ -151,7 +155,7 @@ jobs:
 
           source ~/.cargo/env
 
-          cat <<EOF >> ~/.cargo/config
+          cat <<EOF >> ~/.cargo/config.toml
           [net]
           git-fetch-with-cli = true
           EOF
@@ -211,7 +215,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
 
-          TITLE: failed workflow
+          TITLE: CI Rust failed
           ASSIGNEES: ${{ github.actor }}
           LABELS: workflows,ci
           BODY: |
