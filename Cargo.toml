@@ -1,6 +1,18 @@
 [package]
-name = "ghact-rust"
-version = "0.1.0"
-edition = "2021"
+name                    = "ghact-rust"
+version                 = "0.1.0"
+publish                 = false
+rust-version            = "1.83.0"
+edition                 = "2021"
+
+keywords                = ["github"]
+categories              = ["development-tools"]
+
+authors                 = ["hanepjiv <hanepjiv@gmail.com>"]
+license                 = "MIT OR Apache-2.0"
+documentation           = "https://docs.rs/elicit/"
+homepage                = "https://github.com/hanepjiv/ghact-rust"
+repository              = "https://github.com/hanepjiv/ghact-rust.git"
+readme                  = "README.md"
 
 [dependencies]
