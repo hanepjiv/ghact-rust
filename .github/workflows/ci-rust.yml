@@ -4,7 +4,7 @@
 #  @author hanepjiv <hanepjiv@gmail.com>
 #  @copyright The MIT License (MIT) / Apache License Version 2.0
 #  @since 2024/11/09
-#  @date 2024/11/30
+#  @date 2024/12/16
 
 name: CI Rust
 
@@ -29,35 +29,87 @@ jobs:
 
     outputs:
       test-sets: |
-        cargo +stable build
-        cargo +stable test
-        cargo +stable clippy -- -D clippy::all
-        cargo +stable build --no-default-features
-        cargo +stable test --no-default-features
-        cargo +stable clippy --no-default-features -- -D clippy::all
-        cargo +stable build --all-features
-        cargo +stable test --all-features
-        cargo +stable clippy --all-features -- -D clippy::all
-
-        cargo +beta build
-        cargo +beta test
-        cargo +beta clippy -- -D clippy::all
-        cargo +beta build --no-default-features
-        cargo +beta test --no-default-features
-        cargo +beta clippy --no-default-features -- -D clippy::all
-        cargo +beta build --all-features
-        cargo +beta test --all-features
-        cargo +beta clippy --all-features -- -D clippy::all
-
-        cargo +nightly build
-        cargo +nightly test
-        cargo +nightly clippy -- -D clippy::all
-        cargo +nightly build --no-default-features
-        cargo +nightly test --no-default-features
-        cargo +nightly clippy --no-default-features -- -D clippy::all
-        cargo +nightly build --all-features
-        cargo +nightly test --all-features
-        cargo +nightly clippy --all-features -- -D clippy::all
+        cargo +stable build --workspace --bins --examples --tests --profile dev
+        cargo +stable build --workspace --bins --examples --tests --profile release
+        cargo +stable build --workspace --bins --examples --tests --profile test
+        cargo +stable build --workspace --bins --examples --tests --profile bench
+        cargo +stable build --no-default-features --workspace --bins --examples --tests --profile dev
+        cargo +stable build --no-default-features --workspace --bins --examples --tests --profile release
+        cargo +stable build --no-default-features --workspace --bins --examples --tests --profile test
+        cargo +stable build --no-default-features --workspace --bins --examples --tests --profile bench
+        cargo +stable build --all-features --workspace --bins --examples --tests --profile dev
+        cargo +stable build --all-features --workspace --bins --examples --tests --profile release
+        cargo +stable build --all-features --workspace --bins --examples --tests --profile test
+        cargo +stable build --all-features --workspace --bins --examples --tests --profile bench
+        cargo +stable test --workspace --bins --examples --tests --profile dev
+        cargo +stable test --workspace --bins --examples --tests --profile release
+        cargo +stable test --workspace --bins --examples --tests --profile test
+        cargo +stable test --workspace --bins --examples --tests --profile bench
+        cargo +stable test --no-default-features --workspace --bins --examples --tests --profile dev
+        cargo +stable test --no-default-features --workspace --bins --examples --tests --profile release
+        cargo +stable test --no-default-features --workspace --bins --examples --tests --profile test
+        cargo +stable test --no-default-features --workspace --bins --examples --tests --profile bench
+        cargo +stable test --all-features --workspace --bins --examples --tests --profile dev
+        cargo +stable test --all-features --workspace --bins --examples --tests --profile release
+        cargo +stable test --all-features --workspace --bins --examples --tests --profile test
+        cargo +stable test --all-features --workspace --bins --examples --tests --profile bench
+        cargo +stable clippy --workspace --bins --examples --tests -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +stable clippy --no-default-features --workspace --bins --examples --tests -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +stable clippy --all-features --workspace --bins --examples --tests -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +beta build --workspace --bins --examples --tests --profile dev
+        cargo +beta build --workspace --bins --examples --tests --profile release
+        cargo +beta build --workspace --bins --examples --tests --profile test
+        cargo +beta build --workspace --bins --examples --tests --profile bench
+        cargo +beta build --no-default-features --workspace --bins --examples --tests --profile dev
+        cargo +beta build --no-default-features --workspace --bins --examples --tests --profile release
+        cargo +beta build --no-default-features --workspace --bins --examples --tests --profile test
+        cargo +beta build --no-default-features --workspace --bins --examples --tests --profile bench
+        cargo +beta build --all-features --workspace --bins --examples --tests --profile dev
+        cargo +beta build --all-features --workspace --bins --examples --tests --profile release
+        cargo +beta build --all-features --workspace --bins --examples --tests --profile test
+        cargo +beta build --all-features --workspace --bins --examples --tests --profile bench
+        cargo +beta test --workspace --bins --examples --tests --profile dev
+        cargo +beta test --workspace --bins --examples --tests --profile release
+        cargo +beta test --workspace --bins --examples --tests --profile test
+        cargo +beta test --workspace --bins --examples --tests --profile bench
+        cargo +beta test --no-default-features --workspace --bins --examples --tests --profile dev
+        cargo +beta test --no-default-features --workspace --bins --examples --tests --profile release
+        cargo +beta test --no-default-features --workspace --bins --examples --tests --profile test
+        cargo +beta test --no-default-features --workspace --bins --examples --tests --profile bench
+        cargo +beta test --all-features --workspace --bins --examples --tests --profile dev
+        cargo +beta test --all-features --workspace --bins --examples --tests --profile release
+        cargo +beta test --all-features --workspace --bins --examples --tests --profile test
+        cargo +beta test --all-features --workspace --bins --examples --tests --profile bench
+        cargo +beta clippy --workspace --bins --examples --tests -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +beta clippy --no-default-features --workspace --bins --examples --tests -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +beta clippy --all-features --workspace --bins --examples --tests -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +nightly build --workspace --all-targets --profile dev
+        cargo +nightly build --workspace --all-targets --profile release
+        cargo +nightly build --workspace --all-targets --profile test
+        cargo +nightly build --workspace --all-targets --profile bench
+        cargo +nightly build --no-default-features --workspace --all-targets --profile dev
+        cargo +nightly build --no-default-features --workspace --all-targets --profile release
+        cargo +nightly build --no-default-features --workspace --all-targets --profile test
+        cargo +nightly build --no-default-features --workspace --all-targets --profile bench
+        cargo +nightly build --all-features --workspace --all-targets --profile dev
+        cargo +nightly build --all-features --workspace --all-targets --profile release
+        cargo +nightly build --all-features --workspace --all-targets --profile test
+        cargo +nightly build --all-features --workspace --all-targets --profile bench
+        cargo +nightly test --workspace --all-targets --profile dev
+        cargo +nightly test --workspace --all-targets --profile release
+        cargo +nightly test --workspace --all-targets --profile test
+        cargo +nightly test --workspace --all-targets --profile bench
+        cargo +nightly test --no-default-features --workspace --all-targets --profile dev
+        cargo +nightly test --no-default-features --workspace --all-targets --profile release
+        cargo +nightly test --no-default-features --workspace --all-targets --profile test
+        cargo +nightly test --no-default-features --workspace --all-targets --profile bench
+        cargo +nightly test --all-features --workspace --all-targets --profile dev
+        cargo +nightly test --all-features --workspace --all-targets --profile release
+        cargo +nightly test --all-features --workspace --all-targets --profile test
+        cargo +nightly test --all-features --workspace --all-targets --profile bench
+        cargo +nightly clippy --workspace --all-targets -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +nightly clippy --no-default-features --workspace --all-targets -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +nightly clippy --all-features --workspace --all-targets -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
 
       cache-rust-toolchain-path: |
         ~/.cargo/
@@ -196,7 +248,6 @@ jobs:
         run: |
           source ~/.cargo/env
           cargo update
-          cargo audit
 
       - name: Restore cached Rust target
         id: cache-rust-target-restore
@@ -205,12 +256,14 @@ jobs:
           path: ${{ needs.params.outputs.cache-rust-target-path }}
           key: ${{ needs.params.outputs.cache-rust-target-key }}-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Run cargo test, clippy
+      - name: Run cargo build, test, clippy
         run: |
           source ~/.cargo/env
           cargo +nightly update -Z direct-minimal-versions
+          cargo audit -D warnings
           echo "${{ needs.params.outputs.test-sets }}" | sh
           cargo update
+          cargo audit -D warnings -n
           echo "${{ needs.params.outputs.test-sets }}" | sh
 
       - name: Save cached Rust target
