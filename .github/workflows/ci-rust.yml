@@ -197,7 +197,7 @@ jobs:
 
       - name: Install apt-packages
         if: inputs.apt-packages != ''
-        uses: awalsh128/cache-apt-pkgs-action@latest
+        uses: awalsh128/cache-apt-pkgs-action@v1.4.3
         with:
           packages: ${{ needs.params.outputs.pkgs }}
           version: ${{ needs.params.outputs.pkgs_sha }}
