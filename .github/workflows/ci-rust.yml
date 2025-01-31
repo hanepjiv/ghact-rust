@@ -4,7 +4,7 @@
 #  @author hanepjiv <hanepjiv@gmail.com>
 #  @copyright The MIT License (MIT) / Apache License Version 2.0
 #  @since 2024/11/09
-#  @date 2025/01/21
+#  @date 2025/01/31
 
 name: CI Rust
 
@@ -221,7 +221,7 @@ jobs:
           path: ${{ needs.params.outputs.cache-rust-target-path }}
           key: ${{ needs.params.outputs.cache-rust-target-key }}-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Run cargo build, test, clippy
+      - name: Run allchecks
         run: |
           source ~/.cargo/env
           cargo +nightly update -Z direct-minimal-versions
@@ -240,7 +240,7 @@ jobs:
           key: ${{ needs.params.outputs.cache-rust-target-key }}-${{ hashFiles('**/Cargo.lock') }} # use new hash
 
       - name: Create issue when failed
-        if: ${{ failure() && github.event_name == 'push' }}
+        if: ${{ failure() }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
