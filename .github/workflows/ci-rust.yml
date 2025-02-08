@@ -4,7 +4,7 @@
 #  @author hanepjiv <hanepjiv@gmail.com>
 #  @copyright The MIT License (MIT) / Apache License Version 2.0
 #  @since 2024/11/09
-#  @date 2025/01/31
+#  @date 2025/02/08
 
 name: CI Rust
 
@@ -29,52 +29,114 @@ jobs:
 
     outputs:
       test-sets: |
-        cargo +stable test --workspace --lib --bins --examples --tests --profile dev
-        cargo +stable test --workspace --lib --bins --examples --tests --profile release
-        cargo +stable test --workspace --lib --bins --examples --tests --profile test
-        cargo +stable test --workspace --lib --bins --examples --tests --profile bench
-        cargo +stable test --no-default-features --workspace --lib --bins --examples --tests --profile dev
-        cargo +stable test --no-default-features --workspace --lib --bins --examples --tests --profile release
-        cargo +stable test --no-default-features --workspace --lib --bins --examples --tests --profile test
-        cargo +stable test --no-default-features --workspace --lib --bins --examples --tests --profile bench
-        cargo +stable test --all-features --workspace --lib --bins --examples --tests --profile dev
-        cargo +stable test --all-features --workspace --lib --bins --examples --tests --profile release
-        cargo +stable test --all-features --workspace --lib --bins --examples --tests --profile test
-        cargo +stable test --all-features --workspace --lib --bins --examples --tests --profile bench
-        cargo +stable clippy --workspace --lib --bins --examples --tests -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
-        cargo +stable clippy --no-default-features --workspace --lib --bins --examples --tests -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
-        cargo +stable clippy --all-features --workspace --lib --bins --examples --tests -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
-        cargo +beta test --workspace --lib --bins --examples --tests --profile dev
-        cargo +beta test --workspace --lib --bins --examples --tests --profile release
-        cargo +beta test --workspace --lib --bins --examples --tests --profile test
-        cargo +beta test --workspace --lib --bins --examples --tests --profile bench
-        cargo +beta test --no-default-features --workspace --lib --bins --examples --tests --profile dev
-        cargo +beta test --no-default-features --workspace --lib --bins --examples --tests --profile release
-        cargo +beta test --no-default-features --workspace --lib --bins --examples --tests --profile test
-        cargo +beta test --no-default-features --workspace --lib --bins --examples --tests --profile bench
-        cargo +beta test --all-features --workspace --lib --bins --examples --tests --profile dev
-        cargo +beta test --all-features --workspace --lib --bins --examples --tests --profile release
-        cargo +beta test --all-features --workspace --lib --bins --examples --tests --profile test
-        cargo +beta test --all-features --workspace --lib --bins --examples --tests --profile bench
-        cargo +beta clippy --workspace --lib --bins --examples --tests -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
-        cargo +beta clippy --no-default-features --workspace --lib --bins --examples --tests -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
-        cargo +beta clippy --all-features --workspace --lib --bins --examples --tests -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
-        cargo +nightly test --workspace --all-targets --profile dev
-        cargo +nightly test --workspace --all-targets --profile release
-        cargo +nightly test --workspace --all-targets --profile test
-        cargo +nightly test --workspace --all-targets --profile bench
-        cargo +nightly test --no-default-features --workspace --all-targets --profile dev
-        cargo +nightly test --no-default-features --workspace --all-targets --profile release
-        cargo +nightly test --no-default-features --workspace --all-targets --profile test
-        cargo +nightly test --no-default-features --workspace --all-targets --profile bench
-        cargo +nightly test --all-features --workspace --all-targets --profile dev
-        cargo +nightly test --all-features --workspace --all-targets --profile release
-        cargo +nightly test --all-features --workspace --all-targets --profile test
-        cargo +nightly test --all-features --workspace --all-targets --profile bench
-        cargo +nightly clippy --workspace --all-targets -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
-        cargo +nightly clippy --no-default-features --workspace --all-targets -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
-        cargo +nightly clippy --all-features --workspace --all-targets -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
-
+        cargo +stable test --all-targets --workspace --profile dev
+        cargo +stable test --all-targets --workspace --profile release
+        cargo +stable test --all-targets --workspace --profile test
+        cargo +stable test --all-targets --workspace --profile bench
+        cargo +stable test --all-targets --workspace --no-default-features --profile dev
+        cargo +stable test --all-targets --workspace --no-default-features --profile release
+        cargo +stable test --all-targets --workspace --no-default-features --profile test
+        cargo +stable test --all-targets --workspace --no-default-features --profile bench
+        cargo +stable test --all-targets --workspace --all-features --profile dev
+        cargo +stable test --all-targets --workspace --all-features --profile release
+        cargo +stable test --all-targets --workspace --all-features --profile test
+        cargo +stable test --all-targets --workspace --all-features --profile bench
+        cargo +stable build --all-targets --workspace --profile dev
+        cargo +stable build --all-targets --workspace --profile release
+        cargo +stable build --all-targets --workspace --profile test
+        cargo +stable build --all-targets --workspace --profile bench
+        cargo +stable build --all-targets --workspace --no-default-features --profile dev
+        cargo +stable build --all-targets --workspace --no-default-features --profile release
+        cargo +stable build --all-targets --workspace --no-default-features --profile test
+        cargo +stable build --all-targets --workspace --no-default-features --profile bench
+        cargo +stable build --all-targets --workspace --all-features --profile dev
+        cargo +stable build --all-targets --workspace --all-features --profile release
+        cargo +stable build --all-targets --workspace --all-features --profile test
+        cargo +stable build --all-targets --workspace --all-features --profile bench
+        cargo +stable clippy --all-targets --workspace --profile dev -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +stable clippy --all-targets --workspace --profile release -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +stable clippy --all-targets --workspace --profile test -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +stable clippy --all-targets --workspace --profile bench -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +stable clippy --all-targets --workspace --no-default-features --profile dev -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +stable clippy --all-targets --workspace --no-default-features --profile release -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +stable clippy --all-targets --workspace --no-default-features --profile test -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +stable clippy --all-targets --workspace --no-default-features --profile bench -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +stable clippy --all-targets --workspace --all-features --profile dev -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +stable clippy --all-targets --workspace --all-features --profile release -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +stable clippy --all-targets --workspace --all-features --profile test -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +stable clippy --all-targets --workspace --all-features --profile bench -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +beta test --all-targets --workspace --profile dev
+        cargo +beta test --all-targets --workspace --profile release
+        cargo +beta test --all-targets --workspace --profile test
+        cargo +beta test --all-targets --workspace --profile bench
+        cargo +beta test --all-targets --workspace --no-default-features --profile dev
+        cargo +beta test --all-targets --workspace --no-default-features --profile release
+        cargo +beta test --all-targets --workspace --no-default-features --profile test
+        cargo +beta test --all-targets --workspace --no-default-features --profile bench
+        cargo +beta test --all-targets --workspace --all-features --profile dev
+        cargo +beta test --all-targets --workspace --all-features --profile release
+        cargo +beta test --all-targets --workspace --all-features --profile test
+        cargo +beta test --all-targets --workspace --all-features --profile bench
+        cargo +beta build --all-targets --workspace --profile dev
+        cargo +beta build --all-targets --workspace --profile release
+        cargo +beta build --all-targets --workspace --profile test
+        cargo +beta build --all-targets --workspace --profile bench
+        cargo +beta build --all-targets --workspace --no-default-features --profile dev
+        cargo +beta build --all-targets --workspace --no-default-features --profile release
+        cargo +beta build --all-targets --workspace --no-default-features --profile test
+        cargo +beta build --all-targets --workspace --no-default-features --profile bench
+        cargo +beta build --all-targets --workspace --all-features --profile dev
+        cargo +beta build --all-targets --workspace --all-features --profile release
+        cargo +beta build --all-targets --workspace --all-features --profile test
+        cargo +beta build --all-targets --workspace --all-features --profile bench
+        cargo +beta clippy --all-targets --workspace --profile dev -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +beta clippy --all-targets --workspace --profile release -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +beta clippy --all-targets --workspace --profile test -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +beta clippy --all-targets --workspace --profile bench -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +beta clippy --all-targets --workspace --no-default-features --profile dev -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +beta clippy --all-targets --workspace --no-default-features --profile release -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +beta clippy --all-targets --workspace --no-default-features --profile test -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +beta clippy --all-targets --workspace --no-default-features --profile bench -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +beta clippy --all-targets --workspace --all-features --profile dev -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +beta clippy --all-targets --workspace --all-features --profile release -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +beta clippy --all-targets --workspace --all-features --profile test -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +beta clippy --all-targets --workspace --all-features --profile bench -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +nightly test --all-targets --workspace --profile dev
+        cargo +nightly test --all-targets --workspace --profile release
+        cargo +nightly test --all-targets --workspace --profile test
+        cargo +nightly test --all-targets --workspace --profile bench
+        cargo +nightly test --all-targets --workspace --no-default-features --profile dev
+        cargo +nightly test --all-targets --workspace --no-default-features --profile release
+        cargo +nightly test --all-targets --workspace --no-default-features --profile test
+        cargo +nightly test --all-targets --workspace --no-default-features --profile bench
+        cargo +nightly test --all-targets --workspace --all-features --profile dev
+        cargo +nightly test --all-targets --workspace --all-features --profile release
+        cargo +nightly test --all-targets --workspace --all-features --profile test
+        cargo +nightly test --all-targets --workspace --all-features --profile bench
+        cargo +nightly build --all-targets --workspace --profile dev
+        cargo +nightly build --all-targets --workspace --profile release
+        cargo +nightly build --all-targets --workspace --profile test
+        cargo +nightly build --all-targets --workspace --profile bench
+        cargo +nightly build --all-targets --workspace --no-default-features --profile dev
+        cargo +nightly build --all-targets --workspace --no-default-features --profile release
+        cargo +nightly build --all-targets --workspace --no-default-features --profile test
+        cargo +nightly build --all-targets --workspace --no-default-features --profile bench
+        cargo +nightly build --all-targets --workspace --all-features --profile dev
+        cargo +nightly build --all-targets --workspace --all-features --profile release
+        cargo +nightly build --all-targets --workspace --all-features --profile test
+        cargo +nightly build --all-targets --workspace --all-features --profile bench
+        cargo +nightly clippy --all-targets --workspace --profile dev -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +nightly clippy --all-targets --workspace --profile release -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +nightly clippy --all-targets --workspace --profile test -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +nightly clippy --all-targets --workspace --profile bench -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +nightly clippy --all-targets --workspace --no-default-features --profile dev -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +nightly clippy --all-targets --workspace --no-default-features --profile release -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +nightly clippy --all-targets --workspace --no-default-features --profile test -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +nightly clippy --all-targets --workspace --no-default-features --profile bench -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +nightly clippy --all-targets --workspace --all-features --profile dev -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +nightly clippy --all-targets --workspace --all-features --profile release -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +nightly clippy --all-targets --workspace --all-features --profile test -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
+        cargo +nightly clippy --all-targets --workspace --all-features --profile bench -- -D clippy::all -D clippy::correctness -D clippy::suspicious -D clippy::style -D clippy::complexity -D clippy::perf -D clippy::pedantic -D clippy::cargo -W clippy::multiple_crate_versions
 
       cache-rust-toolchain-path: |
         ~/.cargo/
