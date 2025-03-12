@@ -2,7 +2,7 @@
 
 ## Build Status
 
-- main: [![CI Rust](https://github.com/hanepjiv/ghact-rust/actions/workflows/ci-rust.yml/badge.svg)](https://github.com/hanepjiv/ghact-rust/actions/workflows/ci-rust.yml)
+- main: [![CI Rust](https://github.com/hanepjiv/ghact-rust/actions/workflows/dispatch.yml/badge.svg)](https://github.com/hanepjiv/ghact-rust/actions/workflows/dispatch.yml)
 
 ## License
 
