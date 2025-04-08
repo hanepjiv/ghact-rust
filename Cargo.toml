@@ -10,8 +10,6 @@ keywords                = ["github"]
 categories              = ["development-tools"]
 readme                  = "README.md"
 
-rust-version            = "1.83.0"
-edition                 = "2021"
 authors                 = ["hanepjiv <hanepjiv@gmail.com>"]
 license                 = "MIT OR Apache-2.0"
 documentation           = "https://docs.rs/elicit/"
