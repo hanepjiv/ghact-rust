@@ -15,5 +15,7 @@ license                 = "MIT OR Apache-2.0"
 documentation           = "https://docs.rs/elicit/"
 homepage                = "https://github.com/hanepjiv/ghact-rust"
 repository              = "https://github.com/hanepjiv/ghact-rust.git"
+
+rust-version            = "1.16.0"
 # =============================================================================
 [dependencies]
