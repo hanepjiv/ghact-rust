@@ -143,9 +143,11 @@ jobs:
 
           rustup set profile minimal
           rustup install stable beta nightly
-          rustup component add --toolchain stable clippy
-          rustup component add --toolchain beta clippy
-          rustup component add --toolchain nightly clippy
+          for i in stable beta nightly; do
+            for j in rustfmt clippy; do
+              rustup component add --toolchain $i $j
+            done
+          done
 
           curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 
