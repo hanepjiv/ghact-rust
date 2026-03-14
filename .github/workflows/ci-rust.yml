@@ -141,8 +141,6 @@ jobs:
           git-fetch-with-cli = true
           EOF
 
-          rustup self upgrade
-          rustup self upgrade-data
           rustup set profile minimal
           rustup install stable beta nightly
           for i in stable beta nightly; do
