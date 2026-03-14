@@ -4,7 +4,7 @@
 #  @author hanepjiv <hanepjiv@gmail.com>
 #  @copyright The MIT License (MIT) / Apache License Version 2.0
 #  @since 2024/11/09
-#  @date 2026/03/14
+#  @date 2026/03/15
 
 name: CI Rust
 
@@ -141,6 +141,7 @@ jobs:
           git-fetch-with-cli = true
           EOF
 
+          rustup self upgrade
           rustup set profile minimal
           rustup install stable beta nightly
           for i in stable beta nightly; do
