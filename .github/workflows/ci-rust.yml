@@ -4,7 +4,7 @@
 #  @author hanepjiv <hanepjiv@gmail.com>
 #  @copyright The MIT License (MIT) / Apache License Version 2.0
 #  @since 2024/11/09
-#  @date 2026/03/15
+#  @date 2026/03/18
 
 name: CI Rust
 
@@ -121,7 +121,7 @@ jobs:
 
       - name: Restore cached Rust toolchain
         id: cache-rust-toolchain-restore
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ${{ needs.params.outputs.cache-rust-toolchain-path }}
           key: ${{ needs.params.outputs.cache-rust-toolchain-key }}
@@ -156,7 +156,7 @@ jobs:
       - name: Save cached Rust toolchain
         if: steps.cache-rust-toolchain-restore.outputs.cache-hit != 'true'
         id: cache-rust-toolchain-save
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: ${{ needs.params.outputs.cache-rust-toolchain-path }}
           key: ${{ needs.params.outputs.cache-rust-toolchain-key }}
@@ -170,7 +170,7 @@ jobs:
 
       - name: Restore cached Rust target
         id: cache-rust-target-restore
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ${{ needs.params.outputs.cache-rust-target-path }}
           key: ${{ needs.params.outputs.cache-rust-target-key }}-${{ hashFiles('**/Cargo.lock') }}
@@ -184,7 +184,7 @@ jobs:
       - name: Save cached Rust target
         if: steps.cache-rust-target-restore.outputs.cache-hit != 'true'
         id: cache-rust-target-save
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: ${{ needs.params.outputs.cache-rust-target-path }}
           key: ${{ needs.params.outputs.cache-rust-target-key }}-${{ hashFiles('**/Cargo.lock') }} # use new hash
