@@ -1,5 +1,13 @@
 #!/bin/env sh
 # -*- mode:sh; coding:utf-8-unix; -*-
 
-cargo fmt --all || exit $?
-cargo check || exit $?
+SCRIPT_DIR=$(realpath $(dirname $(readlink -f $0)))
+
+source $SCRIPT_DIR/run_cargo.sh
+
+main() {
+    run_cargo $ACTIVE_TOOLCHAIN check || return $?
+    run_cargo nightly fmt --all || return $?
+}
+
+main || exit $?
