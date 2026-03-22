@@ -26,7 +26,7 @@ function logc () {
 function run_with_trace () {
     logc CYAN $@ # && return 0
 
-    bash -c "$@"
+    $@
     local ret=$?
 
     if [ $ret -ne 0 ]; then
@@ -50,13 +50,19 @@ function run_cargo() {
     local toolchain=$1
     shift
 
-    if [[ $toolchain == $ACTIVE_TOOLCHAIN ]]; then
+    if [[ $toolchain == $ACTIVE_TOOLCHAIN \
+              || $1 == "fmt" \
+              || $1 == "update" \
+              || $1 == "clippy" \
+              || $1 == "deny" \
+              || $1 == "msrv" \
+        ]]; then
         run_with_trace "cargo +$toolchain $@" || return $?
     else
         local target_dir="${TARGET_DIR[$toolchain]}"
         mkdir -p $target_dir || return $?
         run_with_trace \
-            "CARGO_TARGET_DIR=$target_dir cargo +$toolchain $@" || return $?
+            "cargo +$toolchain $@ --target-dir=$target_dir" || return $?
     fi
 
     return 0
