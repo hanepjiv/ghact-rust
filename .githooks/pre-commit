@@ -5,9 +5,11 @@ SCRIPT_DIR=$(realpath $(dirname $(readlink -f $0)))
 
 source $SCRIPT_DIR/run_cargo.sh
 
-main() {
+function main() {
     run_cargo $ACTIVE_TOOLCHAIN check || return $?
     run_cargo nightly fmt --all || return $?
+    return 0
 }
 
 main || exit $?
+exit 0

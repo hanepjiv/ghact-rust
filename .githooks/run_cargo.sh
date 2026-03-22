@@ -26,7 +26,7 @@ function logc () {
 function run_with_trace () {
     logc CYAN $@ # && return 0
 
-    "$@"
+    bash -c "$@"
     local ret=$?
 
     if [ $ret -ne 0 ]; then
@@ -46,25 +46,18 @@ declare -A TARGET_DIR=(
     [nightly]="target/nightly"
 )
 
-run_cargo() {
+function run_cargo() {
     local toolchain=$1
     shift
 
-    local target_dir_prev=${CARGO_TARGET_DIR}
-    unset CARGO_TARGET_DIR
-
-    if [[ $toolchain != $ACTIVE_TOOLCHAIN ]]; then
+    if [[ $toolchain == $ACTIVE_TOOLCHAIN ]]; then
+        run_with_trace "cargo +$toolchain $@" || return $?
+    else
         local target_dir="${TARGET_DIR[$toolchain]}"
         mkdir -p $target_dir || return $?
-        export CARGO_TARGET_DIR=$target_dir
+        run_with_trace \
+            "CARGO_TARGET_DIR=$target_dir cargo +$toolchain $@" || return $?
     fi
 
-    run_with_trace cargo +$toolchain $@
-    local ret=$?
-
-    if [[ -z $target_dir_prev ]]; then
-        export CARGO_TARGET_DIR=$target_dir_prev
-    fi
-
-    return $ret
+    return 0
 }
